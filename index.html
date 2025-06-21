@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Innova Learning - Plataforma Única</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eef2f6; /* Un gris claro azulado */
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 25px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: none; /* Ocultar todas las secciones por defecto */
+        }
+        .container.active {
+            display: block; /* Mostrar la sección activa */
+        }
+
+        header {
+            background-color: #28a745; /* Verde vibrante de Innova */
+            color: white;
+            padding: 1.5em 0;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.8em;
+            letter-spacing: 1px;
+        }
+
+        nav {
+            background-color: #f8f9fa; /* Blanco grisáceo para la barra de navegación */
+            padding: 12px 0;
+            text-align: center;
+            border-bottom: 1px solid #dee2e6;
+            border-radius: 0 0 10px 10px;
+            margin-bottom: 20px;
+        }
+
+        nav a {
+            color: #007bff; /* Azul de enlace */
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: bold;
+            cursor: pointer; /* Para indicar que son clicables */
+        }
+
+        nav a.active, nav a:hover {
+            background-color: #e9ecef; /* Gris claro al pasar el ratón */
+            color: #0056b3; /* Azul más oscuro al pasar el ratón */
+        }
+
+        /* Common Section Styling */
+        h2 {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            font-size: 2em;
+        }
+
+        /* Course Cards */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .course-card {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        .course-card h3 {
+            margin-top: 0;
+            color: #28a745;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .course-card p {
+            font-size: 0.95em;
+            color: #555;
+            flex-grow: 1; /* Permite que el párrafo ocupe espacio y empuje el botón hacia abajo */
+        }
+
+        .course-card .button-container {
+            margin-top: 20px;
+        }
+
+        .enroll-button, .view-button, .back-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease, transform 0.1s ease-in-out;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .enroll-button:hover, .view-button:hover, .back-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        .enroll-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        /* Progress Bars */
+        .progress-section {
+            margin-bottom: 30px;
+        }
+
+        .progress-item {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-item h3 {
+            margin-top: 0;
+            color: #28a745;
+            font-size: 1.3em;
+        }
+
+        .progress-container-outer {
+            background-color: #e9ecef;
+            border-radius: 5px;
+            height: 25px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .progress-bar-inner {
+            background-color: #007bff;
+            height: 100%;
+            border-radius: 5px;
+            width: 0%; /* Initial state for animation */
+            transition: width 1s ease-out; /* Smooth animation for progress */
+            text-align: center;
+            line-height: 25px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Notification Pop-up */
+        .notification {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background-color: #28a745; /* Success green */
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Course Details Page Specifics */
+        .course-content h3 {
+            color: #28a745;
+            font-size: 1.6em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .course-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .course-content ul li {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .course-content ul li span {
+            font-weight: bold;
+        }
+
+        .course-content ul li.completed {
+            background-color: #e6ffe6; /* Light green for completed */
+            border-color: #b3ffb3;
+        }
+
+        /* NEW: Styling for clickable lesson title */
+        .lesson-title-link {
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: none;
+            flex-grow: 1; /* Allows it to take available space */
+            text-align: left;
+            margin-right: 15px; /* Space between title and button */
+            transition: color 0.3s ease;
+        }
+        .lesson-title-link:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+
+        .complete-lesson-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .complete-lesson-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .complete-lesson-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        /* NEW: Lesson Content Section Styling */
+        #lesson-content-display {
+            background-color: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.05); /* subtle inner shadow */
+        }
+        #lesson-content-display h4 {
+            color: #28a745;
+            margin-top: 0;
+            font-size: 1.4em;
+        }
+        #lesson-content-display h5 { /* For sub-chapters */
+            color: #007bff;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        #lesson-content-display p {
+            font-size: 1.05em;
+            color: #444;
+            margin-bottom: 10px;
+        }
+        #lesson-content-display ul {
+            list-style: disc inside; /* Default bullet points */
+            padding-left: 20px;
+            color: #555;
+        }
+        #lesson-content-display ul li {
+            margin-bottom: 5px;
+        }
+
+
+        /* Profile Page Specifics */
+        .profile-info p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .profile-info strong {
+            color: #28a745;
+            margin-right: 5px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav a {
+                margin: 0 5px;
+                padding: 8px 10px;
+                font-size: 0.9em;
+            }
+
+            .container {
+                margin: 15px;
+                padding: 20px;
+            }
+
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Innova Learning</h1>
+    </header>
+    <nav>
+        <a id="nav-home" data-section="home" class="active">Inicio</a>
+        <a id="nav-courses" data-section="courses">Cursos</a>
+        <a id="nav-progress" data-section="my-progress">Mi Progreso</a>
+        <a id="nav-profile" data-section="profile">Mi Perfil</a>
+    </nav>
+
+    <div id="home-section" class="container active">
+        <h2>Bienvenido a Innova Learning</h2>
+        <p>Tu plataforma para fortalecer tus capacidades en tecnología aplicada a las necesidades agrícolas.</p>
+        <p>En Innova S.A., creemos en el poder del conocimiento y la innovación. Aquí encontrarás cursos y talleres especializados en IoT agrícola, drones, software de trazabilidad y mucho más, diseñados para impulsar tu talento y el crecimiento de nuestra empresa.</p>
+        
+        <h3>¡Empieza a aprender hoy mismo!</h3>
+        <p>Explora nuestra biblioteca de cursos y sumérgete en el futuro de la agricultura.</p>
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="view-button" onclick="showSection('courses')">Explorar Cursos</button>
+        </div>
+    </div>
+
+    <div id="courses-section" class="container">
+        <h2>Cursos Disponibles</h2>
+        <div class="course-grid" id="course-list">
+            </div>
+    </div>
+
+    <div id="my-progress-section" class="container">
+        <h2>Mi Progreso</h2>
+        <div id="progress-list">
+            </div>
+        <p id="no-courses-message" style="display: none; text-align: center; color: #666; margin-top: 30px;">
+            Aún no te has inscrito en ningún curso. ¡Explora nuestros cursos y empieza a aprender!
+        </p>
+    </div>
+
+    <div id="profile-section" class="container">
+        <h2>Mi Perfil</h2>
+        <div class="profile-info">
+            <p><strong>Nombre:</strong> Usuario Ejemplo Innova</p>
+            <p><strong>Correo Electrónico:</strong> usuario.ejemplo@innova.com</p>
+            <p><strong>Departamento:</strong> Producción Agrícola</p>
+            <p><strong>Cursos Completados:</strong> <span id="completed-courses-count">0</span></p>
+            <p><strong>Último Acceso:</strong> <span id="last-access-date"></span></p>
+        </div>
+    </div>
+
+    <div id="course-detail-section" class="container">
+        <h2 id="course-detail-title"></h2>
+        <p id="course-detail-description"></p>
+
+        <div class="progress-section">
+            <h3>Progreso del Curso</h3>
+            <div class="progress-container-outer">
+                <div class="progress-bar-inner" id="course-detail-progress-bar" style="width: 0%;">0%</div>
+            </div>
+        </div>
+
+        <div class="course-content">
+            <h3>Lecciones:</h3>
+            <ul id="course-detail-lessons-list">
+                </ul>
+            <div id="lesson-content-display">
+                <h4>Haz click en una lección para ver su contenido</h4>
+                <p>Selecciona cualquier lección de la lista para aprender más.</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; text-align: center;">
+            <button class="back-button" onclick="showSection('my-progress')">Volver a Mi Progreso</button>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // --- Data Simulation (Esto reemplazaría una base de datos real) ---
+        const ALL_COURSES_DATA = {
+            "iot-agricola": {
+                id: "iot-agricola",
+                title: "IoT Aplicado a la Agricultura",
+                description: "Aprende sobre sensores, actuadores y la Internet de las Cosas en el agro.",
+                lessons: [
+                    { 
+                        id: "iot-lec1", 
+                        title: "Introducción al IoT en el Agro", 
+                        content: `
+                            <h5>1.1 ¿Qué es el IoT?</h5>
+                            <p>El Internet de las Cosas (IoT) se refiere a una red de objetos físicos equipados con sensores, software y otras tecnologías que les permiten conectarse e intercambiar datos con otros dispositivos y sistemas a través de Internet. En el contexto agrícola, esto significa que las máquinas, los campos y los animales pueden 'hablar' entre sí y con los agricultores.</p>
+                            
+                            <h5>1.2 Revolución en la Agricultura</h5>
+                            <p>El IoT está transformando la agricultura moderna al permitir la recolección de datos en tiempo real y la automatización de procesos. Esto lleva a una agricultura de precisión, donde las decisiones se basan en información exacta y actualizada, optimizando el uso de recursos y mejorando la productividad. Ejemplos incluyen:</p>
+                            <ul>
+                                <li>Monitoreo de cultivos.</li>
+                                <li>Gestión de riego.</li>
+                                <li>Control climático en invernaderos.</li>
+                                <li>Seguimiento de ganado.</li>
+                            </ul>
+                            
+                            <h5>1.3 Beneficios Clave</h5>
+                            <p>La implementación de IoT en el agro ofrece múltiples ventajas:</p>
+                            <ul>
+                                <li><b>Optimización de recursos:</b> Uso eficiente de agua, fertilizantes y energía.</li>
+                                <li><b>Aumento de la productividad:</b> Mejora del rendimiento de los cultivos y la salud del ganado.</li>
+                                <li><b>Reducción de costos:</b> Disminución de pérdidas y mejor asignación de mano de obra.</li>
+                                <li><b>Toma de decisiones informadas:</b> Basada en datos precisos y análisis predictivos.</li>
+                                <li><b>Sostenibilidad:</b> Prácticas agrícolas más respetuosas con el medio ambiente.</li>
+                            `
+                        , completed: false 
+                    },
+                    { 
+                        id: "iot-lec2", 
+                        title: "Sensores y Recolección de Datos", 
+                        content: `
+                            <h5>2.1 La Importancia de los Sensores</h5>
+                            <p>Los sensores son los "ojos y oídos" del IoT en el sector agrícola. Son dispositivos que detectan y miden parámetros físicos o químicos del entorno, convirtiéndolos en señales eléctricas que pueden ser procesadas y analizadas. Sin ellos, la recolección de datos en tiempo real sería imposible.</p>
+
+                            <h5>2.2 Tipos de Sensores Agrícolas</h5>
+                            <p>Existe una gran variedad de sensores diseñados para diferentes aplicaciones en el campo:</p>
+                            <ul>
+                                <li><b>Sensores de Suelo:</b>
+                                    <ul>
+                                        <li>Humedad del suelo: Miden el contenido de agua para optimizar el riego.</li>
+                                        <li>Nutrientes del suelo: Detectan niveles de nitrógeno, fósforo, potasio (NPK) y pH.</li>
+                                        <li>Temperatura del suelo: Importante para la germinación y crecimiento de raíces.</li>
+                                    </ul>
+                                </li>
+                                <li><b>Sensores Climáticos/Meteorológicos:</b>
+                                    <ul>
+                                        <li>Temperatura y humedad del aire: Cruciales para el desarrollo de cultivos y la prevención de enfermedades.</li>
+                                        <li>Velocidad y dirección del viento: Para aplicaciones de pulverización y planificación.</li>
+                                        <li>Radiación solar: Afecta la fotosíntesis de las plantas.</li>
+                                        <li>Precipitación: Para el seguimiento de lluvias y planificación de riego.</li>
+                                    </ul>
+                                </li>
+                                <li><b>Sensores de Plantas y Cultivos:</b>
+                                    <ul>
+                                        <li>Imágenes multiespectrales e hiperespectrales: Usadas por drones para evaluar la salud de las plantas (índice NDVI).</li>
+                                        <li>Sensores de tamaño de fruto/tallos: Monitoreo del crecimiento.</li>
+                                    </ul>
+                                </li>
+                                <li><b>Sensores de Ganadería (ej. wearables):</b>
+                                    <ul>
+                                        <li>Actividad y comportamiento: Detección de celo, enfermedades o estrés en animales.</li>
+                                        <li>Temperatura corporal: Monitoreo de salud.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <h5>2.3 El Proceso de Recolección de Datos</h5>
+                            <p>Los datos recolectados por los sensores se transmiten a través de diversas tecnologías de comunicación (Wi-Fi, LoRaWAN, NB-IoT, 5G) a una plataforma central. Esta transmisión puede ser en tiempo real o por lotes, dependiendo de la necesidad. La fiabilidad y eficiencia de la transmisión son clave para garantizar que la información llegue correctamente para su procesamiento.</p>
+                        `
+                        , completed: false 
+                    },
+                    { 
+                        id: "iot-lec3", 
+                        title: "Actuadores y Automatización", 
+                        content: `
+                            <h5>3.1 ¿Qué son los Actuadores?</h5>
+                            <p>Mientras los sensores son los 'ojos' del sistema IoT, los actuadores son los 'músculos'. Son dispositivos que reciben una señal (generalmente de una plataforma o controlador central) y ejecutan una acción física para modificar el entorno. En la agricultura, permiten la automatización de tareas que tradicionalmente requerían intervención manual.</p>
+
+                            <h5>3.2 Tipos Comunes de Actuadores en el Agro</h5>
+                            <p>Los actuadores son fundamentales para implementar las decisiones basadas en los datos recogidos por los sensores:</p>
+                            <ul>
+                                <li><b>Sistemas de Riego Automatizado:</b>
+                                    <ul>
+                                        <li>Válvulas inteligentes: Se abren o cierran automáticamente según la humedad del suelo (detectada por sensores) o la programación.</li>
+                                        <li>Bombas de agua: Se activan para suministrar la cantidad precisa de agua cuando y donde se necesita.</li>
+                                    </ul>
+                                </li>
+                                <li><b>Sistemas de Fertilización y Nutrición:</b>
+                                    <ul>
+                                        <li>Dispensadores de fertilizantes: Liberan nutrientes de forma controlada basándose en el análisis del suelo.</li>
+                                        <li>Sistemas de dosificación de productos químicos: Para la aplicación precisa de pesticidas o herbicidas, reduciendo el exceso y el impacto ambiental.</li>
+                                    </ul>
+                                </li>
+                                <li><b>Control Climático en Invernaderos:</b>
+                                    <ul>
+                                        <li>Ventiladores y extractores: Se activan para regular la temperatura y humedad del aire.</li>
+                                        <li>Apertura/cierre de ventanas y persianas: Para controlar la ventilación y la exposición solar.</li>
+                                        <li>Sistemas de calefacción/refrigeración: Mantienen las condiciones óptimas para el crecimiento de las plantas.</li>
+                                    </ul>
+                                </li>
+                                <li><b>Automatización de Maquinaria Agrícola:</b>
+                                    <ul>
+                                        <li>Sistemas de dirección automática (GPS): Permiten a tractores y pulverizadores seguir rutas precisas.</li>
+                                        <li>Robots agrícolas: Para tareas como siembra, deshierbe o cosecha de forma autónoma.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <h5>3.3 Beneficios de la Automatización</h5>
+                            <p>La automatización a través de actuadores en la agricultura de precisión conduce a:</p>
+                            <ul>
+                                <li><b>Eficiencia operativa:</b> Reducción de la mano de obra y del tiempo.</li>
+                                <li><b>Precisión:</b> Aplicación exacta de recursos donde son necesarios.</li>
+                                <li><b>Consistencia:</b> Mantenimiento de condiciones óptimas de forma continua.</li>
+                                <li><b>Reducción de residuos:</b> Menos desperdicio de agua, fertilizantes y energía.</li>
+                                <li><b>Mejora del rendimiento:</b> Ambiente de crecimiento ideal para cultivos y bienestar animal.</li>
+                            </ul>
+                        `
+                        , completed: false 
+                    },
+                    { 
+                        id: "iot-lec4", 
+                        title: "Plataformas y Análisis de Datos", 
+                        content: `
+                            <h5>4.1 El Corazón del IoT Agrícola: Las Plataformas</h5>
+                            <p>Una vez que los sensores recolectan datos y los actuadores ejecutan acciones, se necesita un sistema central para gestionar todo. Aquí es donde entran en juego las plataformas de IoT agrícola. Son sistemas de software (a menudo basados en la nube) que actúan como el cerebro de la operación, recibiendo, almacenando, procesando, analizando y presentando los datos de manera inteligible.</p>
+
+                            <h5>4.2 Funcionalidades Clave de una Plataforma IoT</h5>
+                            <p>Las plataformas de IoT agrícola suelen ofrecer las siguientes características:</p>
+                            <ul>
+                                <li><b>Ingestión de Datos:</b> Capacidad para recibir datos de una multitud de sensores y dispositivos, independientemente del protocolo de comunicación.</li>
+                                <li><b>Almacenamiento Seguro:</b> Bases de datos robustas para guardar grandes volúmenes de datos históricos y en tiempo real.</li>
+                                <li><b>Procesamiento y Normalización:</b> Limpieza, filtrado y estandarización de los datos para asegurar su calidad y uniformidad.</li>
+                                <li><b>Análisis de Datos (Analytics):</b>
+                                    <ul>
+                                        <li><b>Descriptivo:</b> ¿Qué ha pasado? (Ej. humedad promedio del suelo en la última semana).</li>
+                                        <li><b>Diagnóstico:</b> ¿Por qué ha pasado? (Ej. ¿por qué bajó la temperatura del invernadero?).</li>
+                                        <li><b>Predictivo:</b> ¿Qué va a pasar? (Ej. predicción de brotes de plagas, necesidades de riego).</li>
+                                        <li><b>Prescriptivo:</b> ¿Qué debo hacer? (Ej. recomendación de cuándo y cuánto regar).</li>
+                                    </ul>
+                                </li>
+                                <li><b>Visualización (Dashboards):</b> Interfaces gráficas intuitivas que muestran los datos en forma de gráficos, mapas, tablas y alertas, facilitando la comprensión y el monitoreo.</li>
+                                <li><b>Gestión de Dispositivos:</b> Monitoreo del estado de los sensores y actuadores, configuración remota y actualización de firmware.</li>
+                                <li><b>Automatización y Reglas:</b> Permite definir reglas lógicas (ej. "SI humedad < X ENTONCES activar riego").</li>
+                                <li><b>Integración:</b> Capacidad de conectarse con otros sistemas (ERP, sistemas de gestión de la granja).</li>
+                            </ul>
+
+                            <h5>4.3 Impacto del Análisis de Datos</h5>
+                            <p>El análisis de datos proporcionado por estas plataformas es lo que realmente impulsa la agricultura de precisión. Transforma datos crudos en información accionable, permitiendo a los agricultores:</p>
+                            <ul>
+                                <li>Detectar problemas antes de que se agraven (enfermedades, deficiencias).</li>
+                                <li>Optimizar los calendarios de siembra y cosecha.</li>
+                                <li>Reducir el consumo de agua, energía y agroquímicos.</li>
+                                <li>Mejorar el bienestar animal y la gestión del ganado.</li>
+                                <li>Aumentar el rendimiento y la calidad de los productos.</li>
+                                <li>Tomar decisiones estratégicas a largo plazo basadas en tendencias históricas.</li>
+                            </ul>
+                            <p>En resumen, las plataformas de IoT y sus capacidades de análisis de datos son esenciales para convertir la información en conocimiento, y el conocimiento en una ventaja competitiva y sostenible para la agricultura moderna.</p>
+                        `
+                        , completed: false 
+                    }
+                ]
+            },
+            "drones-agro": {
+                id: "drones-agro",
+                title: "Uso de Drones en la Agricultura de Precisión",
+                description: "Descubre cómo los drones pueden optimizar la gestión de cultivos.",
+                lessons: [
+                    { 
+                        id: "drones-lec1", 
+                        title: "Introducción a los Drones Agrícolas", 
+                        content: `
+                            <h5>1.1 La Agricultura de Precisión y los Drones</h5>
+                            <p>La agricultura de precisión busca optimizar el rendimiento de los cultivos y el uso de recursos, adaptando las prácticas agrícolas a las variaciones del suelo y del entorno dentro de un mismo campo. Los drones se han convertido en una herramienta revolucionaria para este enfoque, proporcionando datos detallados y aéreos que antes eran difíciles o costosos de obtener.</p>
+                            
+                            <h5>1.2 ¿Por qué Drones en el Agro?</h5>
+                            <p>Los drones ofrecen una perspectiva aérea única que permite una visión macro y micro del campo. Sus capacidades de vuelo bajo y control preciso los hacen ideales para:</p>
+                            <ul>
+                                <li>Monitoreo rápido de grandes extensiones.</li>
+                                <li>Acceso a zonas de difícil acceso.</li>
+                                <li>Recolección de datos de alta resolución.</li>
+                                <li>Agilidad para inspecciones frecuentes.</li>
+                            </ul>
+                            
+                            <h5>1.3 Ventajas sobre Métodos Tradicionales</h5>
+                            <p>Comparados con la inspección manual o imágenes satelitales, los drones ofrecen:</p>
+                            <ul>
+                                <li><b>Mayor detalle y resolución:</b> Permiten identificar problemas específicos en plantas individuales.</li>
+                                <li><b>Flexibilidad temporal:</b> Se pueden desplegar en cualquier momento, sin depender de la órbita de un satélite o las condiciones de nubosidad.</li>
+                                <li><b>Costo-efectividad:</b> Más económicos que aviones tripulados para mapeos aéreos.</li>
+                                <li><b>Rapidez:</b> Cobertura de grandes áreas en poco tiempo.</li>
+                            </ul>
+                        `
+                        , completed: false 
+                    },
+                    { 
+                        id: "drones-lec2", 
+                        title: "Tipos de Drones y Cargas Útiles", 
+                        content: `
+                            <h5>2.1 Tipos de Drones (UAVs) Agrícolas</h5>
+                            <p>En la agricultura, se utilizan principalmente dos tipos de drones:</p>
+                            <ul>
+                                <li><b>Multirotores (ej. cuadricópteros, hexacópteros, octocópteros):</b>
+                                    <ul>
+                                        <li><b>Ventajas:</b> Capacidad de despegue y aterrizaje vertical (VTOL), vuelo estacionario (hovering) preciso, facilidad de operación, buena maniobrabilidad.</li>
+                                        <li><b>Desventajas:</b> Menor autonomía de vuelo (batería), menor cobertura de área por vuelo.</li>
+                                        <li><b>Usos:</b> Inspecciones detalladas de zonas pequeñas, pulverización localizada, monitoreo en tiempo real, levantamiento de imágenes en áreas complejas.</li>
+                                    </ul>
+                                </li>
+                                <li><b>Ala Fija (ej. tipo avión):</b>
+                                    <ul>
+                                        <li><b>Ventajas:</b> Mayor autonomía de vuelo, mayor velocidad, cobertura de grandes extensiones de terreno en un solo vuelo.</li>
+                                        <li><b>Desventajas:</b> Requieren espacio para despegue y aterrizaje (lanzamiento manual o catapulta), menor capacidad de vuelo estacionario.</li>
+                                        <li><b>Usos:</b> Mapeo extensivo de grandes fincas, monitoreo de la salud de cultivos a gran escala.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <h5>2.2 Cargas Útiles (Sensores) para Drones Agrícolas</h5>
+                            <p>La verdadera potencia de un drone agrícola reside en los sensores que transporta, conocidos como cargas útiles:</p>
+                            <ul>
+                                <li><b>Cámaras RGB (Luz Visible):</b>
+                                    <ul>
+                                        <li><b>Función:</b> Capturan imágenes a color estándar, como las de una cámara de fotos común.</li>
+                                        <li><b>Uso en Agro:</b> Monitoreo visual general, detección de malezas grandes, conteo de plantas, evaluación de daños por plagas o sequías (a simple vista).</li>
+                                    </ul>
+                                </li>
+                                <li><b>Cámaras Multiespectrales:</b>
+                                    <ul>
+                                        <li><b>Función:</b> Capturan imágenes en varias bandas del espectro electromagnético (verde, rojo, infrarrojo cercano - NIR). Son cruciales para calcular índices de vegetación como el NDVI (Índice de Vegetación de Diferencia Normalizada).</li>
+                                        <li><b>Uso en Agro:</b> Evaluar la salud de las plantas, detectar estrés hídrico o nutricional mucho antes de que sea visible al ojo humano, identificar áreas con enfermedades o plagas incipientes.</li>
+                                    </ul>
+                                </li>
+                                <li><b>Cámaras Hiperespectrales:</b>
+                                    <ul>
+                                        <li><b>Función:</b> Capturan imágenes en cientos de bandas estrechas, proporcionando un nivel de detalle espectral aún mayor que las multiespectrales.</li>
+                                        <li><b>Uso en Agro:</b> Análisis más profundo de la composición de las plantas, detección de enfermedades muy específicas, calidad de los productos agrícolas, análisis de suelo detallado.</li>
+                                    </ul>
+                                </li>
+                                <li><b>Cámaras Térmicas (Infrarrojo Lejano):</b>
+                                    <ul>
+                                        <li><b>Función:</b> Miden la radiación infrarroja emitida por los objetos, generando mapas de temperatura.</li>
+                                        <li><b>Uso en Agro:</b> Detección de estrés hídrico en plantas (las plantas estresadas suelen tener una temperatura superficial más alta), identificación de problemas de riego, monitoreo de la temperatura del ganado.</li>
+                                    </ul>
+                                </li>
+                                <li><b>Sensores LiDAR (Light Detection and Ranging):</b>
+                                    <ul>
+                                        <li><b>Función:</b> Utilizan pulsos láser para medir distancias y crear modelos 3D muy precisos del terreno y la vegetación.</li>
+                                        <li><b>Uso en Agro:</b> Mapeo de elevaciones, análisis topográfico, modelado de copas de árboles, estimación de biomasa, diseño de sistemas de drenaje y riego.</li>
+                                    </ul>
+                                </li>
+                                <li><b>Pulverizadores y Dispensadores:</b>
+                                    <ul>
+                                        <li><b>Función:</b> Algunos drones (especialmente multirotores de mayor tamaño) están equipados para llevar tanques y pulverizar fertilizantes líquidos, pesticidas o sembrar semillas de forma precisa y localizada.</li>
+                                        <li><b>Uso en Agro:</b> Aplicación de insumos de forma selectiva, reduciendo el desperdicio y el impacto ambiental.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <p>La elección del tipo de drone y la carga útil adecuada dependerá de la tarea específica que se quiera realizar y el nivel de detalle requerido.</p>
+                        `
+                        , completed: false 
+                    },
+                    { 
+                        id: "drones-lec3", 
+                        title: "Planificación de Vuelo y Captura de Datos", 
+                        content: `
+                            <h5>3.1 La Importancia de la Planificación de Vuelo</h5>
+                            <p>Un vuelo de dron exitoso y la recolección de datos de calidad comienzan con una planificación meticulosa. No se trata solo de volar el dron, sino de asegurar que la misión cumpla con los objetivos específicos de la agricultura de precisión.</p>
+
+                            <h5>3.2 Pasos Clave en la Planificación de Vuelo</h5>
+                            <ol>
+                                <li><b>Definición del Objetivo:</b> ¿Qué se quiere lograr? (ej. evaluar estrés hídrico, mapear malezas, monitorear crecimiento). Esto determinará el tipo de sensor y los parámetros de vuelo.</li>
+                                <li><b>Selección del Drone y Sensor:</b> Basado en el objetivo y la extensión del área a cubrir (multirotor para detalle, ala fija para grandes áreas).</li>
+                                <li><b>Software de Planificación de Misión:</b> Se utilizan aplicaciones dedicadas (ej. DJI Pilot, Pix4Dcapture, DroneDeploy) que permiten al usuario:
+                                    <ul>
+                                        <li><b>Definir el Área de Vuelo:</b> Trazar polígonos en un mapa para delimitar la zona de interés.</li>
+                                        <li><b>Configurar la Superposición (Overlap):</b> Determinar el porcentaje de superposición entre imágenes (frontal y lateral) para asegurar que el software de fotogrametría pueda unirlas correctamente. Generalmente, un 70-80% es común.</li>
+                                        <li><b>Establecer la Altura de Vuelo:</b> Directamente relacionada con la resolución (GSD - Ground Sample Distance). A menor altura, mayor resolución, pero menor área cubierta por vuelo.</li>
+                                        <li><b>Definir la Velocidad de Vuelo:</b> Afecta la calidad de la imagen y el tiempo de la misión.</li>
+                                        <li><b>Configurar Parámetros de Cámara:</b> Apertura, ISO, velocidad de obturación (si la cámara lo permite y no es automática).</li>
+                                    </ul>
+                                </li>
+                                <li><b>Condiciones Meteorológicas:</b> Verificar el pronóstico del tiempo. Vientos fuertes, lluvia o demasiada nubosidad pueden afectar la seguridad del vuelo y la calidad de las imágenes (nubosidad afecta la iluminación para sensores multiespectrales).</li>
+                                <li><b>Revisión de Normativas:</b> Asegurarse de cumplir con las regulaciones de vuelo de drones locales (zonas de no vuelo, permisos, etc.).</li>
+                                <li><b>Preparación del Equipo:</b> Cargar baterías, calibrar sensores, revisar hélices y otros componentes del drone.</li>
+                            </ol>
+
+                            <h5>3.3 Captura de Datos de Alta Calidad</h5>
+                            <p>Durante el vuelo, el dron sigue automáticamente la ruta predefinida, capturando imágenes (o datos LiDAR/térmicos) a intervalos regulares. Es fundamental asegurar que la calidad de los datos sea óptima:</p>
+                            <ul>
+                                <li><b>Imágenes Georeferenciadas:</b> Cada imagen debe tener coordenadas GPS asociadas para su correcto procesamiento posterior.</li>
+                                <li><b>Calibración de Sensores:</b> Especialmente para cámaras multiespectrales, se suelen usar paneles de calibración antes y después del vuelo para compensar las variaciones de luz.</li>
+                                <li><b>Consistencia:</b> Mantener una altura y velocidad de vuelo estables ayuda a la uniformidad de los datos.</li>
+                            </ul>
+
+                            <h5>3.4 Post-procesamiento de Datos</h5>
+                            <p>Una vez capturados, los datos en bruto deben ser procesados. Esto generalmente implica:</p>
+                            <ul>
+                                <li><b>Fotogrametría:</b> Software especializado (ej. Pix4D, Agisoft Metashape) une las imágenes superpuestas para crear ortomosaicos de alta resolución (mapas 2D precisos), modelos 3D y nubes de puntos.</li>
+                                <li><b>Generación de Mapas de Índices:</b> A partir de imágenes multiespectrales, se calculan índices de vegetación como el NDVI, que muestran la salud y el vigor de la biomasa.</li>
+                                <li><b>Análisis y Reportes:</b> Los mapas generados se analizan para identificar anomalías, áreas de estrés, presencia de malezas o variaciones en el crecimiento de los cultivos. Esta información se traduce en informes accionables para el agricultor.</li>
+                            </ul>
+                            <p>La planificación rigurosa y la captura de datos de alta calidad son los pilares para extraer valor real de la tecnología de drones en la agricultura de precisión.</p>
+                        `
+                        , completed: false 
+                    }
+                ]
+            },
+            "trazabilidad-software": {
+                id: "trazabilidad-software",
+                title: "Software de Trazabilidad Agrícola",
+                description: "Implementa sistemas para rastrear productos desde el campo hasta la mesa.",
+                lessons: [
+                    { 
+                        id: "traz-lec1", 
+                        title: "Conceptos Clave de Trazabilidad", 
+                        content: `
+                            <h5>1.1 ¿Qué es la Trazabilidad Agrícola?</h5>
+                            <p>La trazabilidad agrícola es la capacidad de rastrear un producto o un lote de productos a lo largo de toda la cadena de suministro, desde el campo (o la granja) hasta la mesa del consumidor. Esto implica documentar y registrar cada etapa, incluyendo la producción, el procesamiento, el almacenamiento y la distribución.</p>
+                            
+                            <h5>1.2 Tipos de Trazabilidad</h5>
+                            <ul>
+                                <li><b>Trazabilidad Hacia Atrás (Upstream):</b> Permite saber de dónde viene el producto o sus componentes. ¿Quién es el proveedor? ¿Cuál es el origen de las semillas/fertilizantes?</li>
+                                <li><b>Trazabilidad Interna (Proceso):</b> Registra qué le sucede al producto dentro de las instalaciones (ej. en el empaque, transformación, almacenamiento). ¿Qué procesos se aplicaron? ¿Qué ingredientes se añadieron?</li>
+                                <li><b>Trazabilidad Hacia Adelante (Downstream):</b> Permite saber a dónde va el producto. ¿Quién es el cliente? ¿A qué lote de distribución pertenece?</li>
+                            </ul>
+                            
+                            <h5>1.3 Importancia de la Trazabilidad en el Agro</h5>
+                            <p>La trazabilidad es fundamental por varias razones:</p>
+                            <ul>
+                                <li><b>Seguridad Alimentaria:</b> Permite identificar rápidamente el origen de un problema (ej. contaminación) y retirar productos afectados del mercado de forma eficiente, protegiendo la salud pública y reduciendo el impacto económico.</li>
+                                <li><b>Control de Calidad:</b> Ayuda a monitorear y asegurar que los productos cumplen con estándares de calidad a lo largo de toda la cadena.</li>
+                                <li><b>Cumplimiento Normativo:</b> Muchas regulaciones nacionales e internacionales exigen sistemas de trazabilidad.</li>
+                                <li><b>Confianza del Consumidor:</b> Los consumidores están cada vez más interesados en conocer el origen y la historia de sus alimentos. La trazabilidad genera transparencia y confianza.</li>
+                                <li><b>Eficiencia Operativa:</b> Mejora la gestión de inventario, reduce desperdicios y optimiza la cadena de suministro.</li>
+                                <li><b>Gestión de Retiradas de Producto (Recalls):</b> Facilita la localización y retirada de productos defectuosos o contaminados del mercado.</li>
+                            </ul>
+                        `
+                        , completed: false 
+                    },
+                    { 
+                        id: "traz-lec2", 
+                        title: "Tecnologías para la Trazabilidad", 
+                        content: `
+                            <h5>2.1 Tecnologías Tradicionales y Modernas</h5>
+                            <p>La trazabilidad ha evolucionado desde el registro manual en papel hasta sistemas digitales complejos. Hoy en día, varias tecnologías facilitan la recolección y gestión de datos de trazabilidad:</p>
+
+                            <h5>2.2 Códigos de Barras y Códigos QR</h5>
+                            <ul>
+                                <li><b>Códigos de Barras:</b> Son representaciones visuales de datos que pueden ser leídos por escáneres. Son económicos y ampliamente utilizados para identificar productos y lotes.</li>
+                                <li><b>Códigos QR (Quick Response):</b> Son bidimensionales y pueden almacenar mucha más información que un código de barras. Permiten a los consumidores acceder directamente a información detallada del producto (origen, certificaciones, fecha de cosecha) escaneándolos con un smartphone.</li>
+                                <li><b>Ventajas:</b> Ampliamente adoptados, fáciles de implementar, económicos.</li>
+                                <li><b>Desventajas:</b> Requieren línea de vista para lectura, limitada cantidad de datos (códigos de barras).</li>
+                            </ul>
+
+                            <h5>2.3 RFID (Identificación por Radiofrecuencia)</h5>
+                            <ul>
+                                <li><b>Funcionamiento:</b> Consiste en etiquetas (tags) con un chip y una antena, y lectores que emiten ondas de radio para leer la información de las etiquetas sin contacto visual.</li>
+                                <li><b>Ventajas:</b> Lectura rápida de múltiples etiquetas a la vez, no requiere línea de vista, mayor capacidad de almacenamiento de datos que los códigos de barras. Ideal para gestionar inventarios en grandes almacenes o campos.</li>
+                                <li><b>Desventajas:</b> Mayor costo por etiqueta que los códigos de barras, posibles interferencias.</li>
+                            </ul>
+
+                            <h5>2.4 Blockchain para la Trazabilidad</h5>
+                            <ul>
+                                <li><b>Concepto:</b> Es una tecnología de registro distribuido (DLT) que crea un registro inmutable y transparente de transacciones. Cada "bloque" de información está enlazado criptográficamente al anterior, formando una cadena.</li>
+                                <li><b>Ventajas en Agro:</b>
+                                    <ul>
+                                        <li><b>Transparencia:</b> Todos los participantes autorizados en la cadena de suministro pueden ver la misma información.</li>
+                                        <li><b>Inmutabilidad:</b> Una vez que un dato se registra, no puede ser alterado, lo que genera alta confianza.</li>
+                                        <li><b>Seguridad:</b> Es muy difícil de hackear.</li>
+                                        <li><b>Descentralización:</b> No depende de una autoridad central.</li>
+                                    </ul>
+                                </li>
+                                <li><b>Casos de Uso:</b> Trazabilidad de productos orgánicos, café de comercio justo, carne de alta calidad, donde la verificación del origen y los atributos es crítica.</li>
+                                <li><b>Desventajas:</b> Complejidad de implementación, escalabilidad (aunque en mejora), consumo energético (en algunos tipos de blockchain).</li>
+                            </ul>
+
+                            <h5>2.5 Sensores y IoT en Trazabilidad</h5>
+                            <p>Además de las tecnologías de identificación, los sensores de IoT juegan un papel crucial al proporcionar datos en tiempo real sobre las condiciones del producto durante el transporte y almacenamiento (temperatura, humedad, golpes), enriqueciendo la información de trazabilidad y garantizando la calidad del producto.</p>
+                        `
+                        , completed: false 
+                    },
+                    { 
+                        id: "traz-lec3", 
+                        title: "Implementación de un Sistema de Trazabilidad", 
+                        content: `
+                            <h5>3.1 Planificación: La Base del Éxito</h5>
+                            <p>Antes de implementar cualquier software, es crucial una planificación exhaustiva:</p>
+                            <ul>
+                                <li><b>Definir Objetivos:</b> ¿Qué se quiere lograr? (ej. cumplir una normativa específica, mejorar la gestión de calidad, aumentar la confianza del consumidor).</li>
+                                <li><b>Mapear la Cadena de Suministro:</b> Identificar todos los actores (proveedores, productores, transportistas, distribuidores, puntos de venta) y los puntos críticos de control donde se generará o registrará información.</li>
+                                <li><b>Identificar Puntos de Datos:</b> Determinar qué información se necesita capturar en cada etapa (ej. origen de la semilla, fecha de siembra, tipo de fertilizante, fecha de cosecha, lote de empaque, destino de envío).</li>
+                                <li><b>Seleccionar la Tecnología:</b> Basado en los objetivos y el presupuesto (códigos QR, RFID, blockchain, combinación).</li>
+                            </ul>
+
+                            <h5>3.2 Selección y Configuración del Software de Trazabilidad</h5>
+                            <p>El software es el pilar central del sistema. Puede ser una solución comercial, un desarrollo a medida o una plataforma basada en la nube.</p>
+                            <ul>
+                                <li><b>Módulos Comunes:</b>
+                                    <ul>
+                                        <li><b>Gestión de Lotes/Productos:</b> Creación y asignación de identificadores únicos a cada lote o unidad de producto.</li>
+                                        <li><b>Registro de Eventos:</b> Interfaz para registrar todas las actividades clave (siembra, aplicación, cosecha, empaque, envío).</li>
+                                        <li><b>Integración:</b> Conexión con sensores IoT, sistemas ERP existentes, equipos de lectura (escáneres, lectores RFID).</li>
+                                        <li><b>Generación de Informes:</b> Herramientas para visualizar y exportar el historial de trazabilidad.</li>
+                                        <li><b>Portal para el Consumidor:</b> (Opcional) Permite a los consumidores acceder a información del producto escaneando un código.</li>
+                                    </ul>
+                                </li>
+                                <li><b>Personalización:</b> Asegurarse de que el software se adapte a las particularidades del negocio agrícola y sus procesos.</li>
+                            </ul>
+
+                            <h5>3.3 Captura y Gestión de Datos</h5>
+                            <p>Esta es la fase de operación diaria:</p>
+                            <ul>
+                                <li><b>Asignación de Identificadores:</b> Cada lote o unidad debe tener un ID único (ej. código QR impreso en el empaque, tag RFID en un contenedor).</li>
+                                <li><b>Registro en Cada Etapa:</b> Capacitar al personal para registrar la información de forma precisa y consistente en el software en cada punto crítico de la cadena.</li>
+                                <li><b>Uso de Dispositivos:</b> Implementar escáneres, lectores RFID o dispositivos móviles para una captura de datos eficiente y sin errores.</li>
+                                <li><b>Verificación de Datos:</b> Establecer procedimientos para asegurar la exactitud y completitud de la información registrada.</li>
+                            </ul>
+
+                            <h5>3.4 Capacitación y Adopción</h5>
+                            <p>Un sistema de trazabilidad solo es efectivo si el personal lo utiliza correctamente. La capacitación es fundamental:</p>
+                            <ul>
+                                <li><b>Entrenamiento Detallado:</b> Enseñar a los usuarios cómo operar el software, cómo usar los dispositivos de captura de datos y la importancia de cada registro.</li>
+                                <li><b>Soporte Continuo:</b> Ofrecer asistencia para resolver dudas y problemas que puedan surgir durante la operación.</li>
+                            </ul>
+
+                            <h5>3.5 Monitoreo y Mejora Continua</h5>
+                            <p>Un sistema de trazabilidad no es estático:</p>
+                            <ul>
+                                <li><b>Auditorías Regulares:</b> Revisar periódicamente la efectividad del sistema y la calidad de los datos.</li>
+                                <li><b>Retroalimentación:</b> Recopilar comentarios de los usuarios para identificar áreas de mejora.</li>
+                                <li><b>Actualizaciones:</b> Mantener el software y el hardware actualizados.</li>
+                            </ul>
+                            <p>Implementar un sistema de trazabilidad robusto requiere inversión de tiempo y recursos, pero los beneficios en seguridad, eficiencia y confianza del consumidor justifican ampliamente el esfuerzo.</p>
+                        `
+                        , completed: false 
+                    }
+                ]
+            }
+        };
+
+        // Carga los cursos inscritos del Local Storage o inicializa si no existen
+        let userCourses = JSON.parse(localStorage.getItem('innovaUserCourses')) || {};
+
+        // --- Funciones Comunes ---
+        function showNotification(message) {
+            const notificationDiv = document.getElementById('notification');
+            notificationDiv.textContent = message;
+            notificationDiv.classList.add('show');
+            setTimeout(() => {
+                notificationDiv.classList.remove('show');
+            }, 3500);
+        }
+
+        function saveUserCourses() {
+            localStorage.setItem('innovaUserCourses', JSON.stringify(userCourses));
+        }
+
+        function calculateCourseProgress(courseId) {
+            const course = userCourses[courseId];
+            if (!course || !course.lessons || course.lessons.length === 0) {
+                return 0;
+            }
+            const completedLessons = course.lessons.filter(lesson => lesson.completed).length;
+            return Math.floor((completedLessons / course.lessons.length) * 100);
+        }
+
+        let currentCourseId = null; // Para saber qué curso se está viendo en detalles
+
+        // --- Funciones de Navegación y Renderizado de Contenido ---
+        function showSection(sectionId, courseId = null) {
+            // Hide all sections
+            document.querySelectorAll('.container').forEach(section => {
+                section.classList.remove('active');
+            });
+            // Remove active class from all nav links
+            document.querySelectorAll('nav a').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId + '-section').classList.add('active');
+            // Set active class on corresponding nav link
+            const navLink = document.querySelector(`[data-section="${sectionId}"]`);
+            if (navLink) {
+                navLink.classList.add('active');
+            }
+
+            // Render content based on section
+            if (sectionId === 'courses') {
+                renderCourses();
+            } else if (sectionId === 'my-progress') {
+                renderMyProgress();
+            } else if (sectionId === 'profile') {
+                renderProfile();
+            } else if (sectionId === 'course-detail') {
+                currentCourseId = courseId; // Store current course ID
+                renderCourseDetails(courseId);
+            }
+        }
+
+        function renderCourses() {
+            const courseListDiv = document.getElementById('course-list');
+            courseListDiv.innerHTML = ''; // Clear previous content
+
+            for (const courseId in ALL_COURSES_DATA) {
+                const course = ALL_COURSES_DATA[courseId];
+                const isEnrolled = userCourses.hasOwnProperty(courseId);
+
+                const courseCard = document.createElement('div');
+                courseCard.classList.add('course-card');
+                courseCard.dataset.courseId = course.id;
+
+                courseCard.innerHTML = `
+                    <h3>${course.title}</h3>
+                    <p>${course.description}</p>
+                    <div class="button-container">
+                        ${isEnrolled 
+                            ? `<button class="view-button" onclick="showSection('course-detail', '${course.id}')">Ver Contenido</button>`
+                            : `<button class="enroll-button" data-course-id="${course.id}">Inscribirse</button>`
+                        }
+                    </div>
+                `;
+                courseListDiv.appendChild(courseCard);
+
+                if (!isEnrolled) {
+                    const enrollButton = courseCard.querySelector('.enroll-button');
+                    enrollButton.addEventListener('click', (event) => {
+                        const clickedCourseId = event.target.dataset.courseId;
+                        // Deep copy the course data to userCourses to allow individual lesson progress tracking
+                        userCourses[clickedCourseId] = JSON.parse(JSON.stringify(ALL_COURSES_DATA[clickedCourseId])); 
+                        saveUserCourses();
+                        showNotification(`¡Te has inscrito en "${ALL_COURSES_DATA[clickedCourseId].title}"!`);
+                        renderCourses(); // Re-render courses to update buttons
+                    });
+                }
+            }
+        }
+
+        function renderMyProgress() {
+            const progressListDiv = document.getElementById('progress-list');
+            const noCoursesMessage = document.getElementById('no-courses-message');
+            progressListDiv.innerHTML = ''; // Clear previous content
+
+            if (Object.keys(userCourses).length === 0) {
+                noCoursesMessage.style.display = 'block';
+                return;
+            } else {
+                noCoursesMessage.style.display = 'none';
+            }
+
+            for (const courseId in userCourses) {
+                const course = userCourses[courseId];
+                const progress = calculateCourseProgress(courseId);
+
+                const progressItem = document.createElement('div');
+                progressItem.classList.add('progress-item');
+                progressItem.innerHTML = `
+                    <h3>${course.title}</h3>
+                    <div class="progress-container-outer">
+                        <div class="progress-bar-inner" style="width: ${progress}%;">
+                            ${progress}%
+                        </div>
+                    </div>
+                    <p style="text-align: right; margin-top: 10px;">
+                        <button class="view-button" onclick="showSection('course-detail', '${course.id}')">Continuar Curso</button>
+                    </p>
+                `;
+                progressListDiv.appendChild(progressItem);
+            }
+        }
+
+        function renderProfile() {
+            const completedCoursesCount = document.getElementById('completed-courses-count');
+            let count = 0;
+            for (const courseId in userCourses) {
+                const course = userCourses[courseId];
+                const totalLessons = course.lessons.length;
+                const completedLessons = course.lessons.filter(lesson => lesson.completed).length;
+                if (totalLessons > 0 && completedLessons === totalLessons) {
+                    count++;
+                }
+            }
+            completedCoursesCount.textContent = count;
+
+            const lastAccessDate = document.getElementById('last-access-date');
+            const now = new Date();
+            lastAccessDate.textContent = now.toLocaleString();
+        }
+
+        function renderCourseDetails(courseId) {
+            const course = userCourses[courseId];
+            if (!course) {
+                document.getElementById('course-detail-title').textContent = "Error: Curso no inscrito";
+                document.getElementById('course-detail-description').textContent = "Por favor, inscríbete desde la página de cursos.";
+                document.getElementById('course-detail-lessons-list').innerHTML = ''; // Clear lessons
+                document.getElementById('course-detail-progress-bar').style.width = '0%';
+                document.getElementById('course-detail-progress-bar').textContent = '0%';
+                document.getElementById('lesson-content-display').innerHTML = '<h4>Error</h4><p>No estás inscrito en este curso o el curso no existe.</p>';
+                return;
+            }
+
+            document.getElementById('course-detail-title').textContent = course.title;
+            document.getElementById('course-detail-description').textContent = course.description;
+            
+            const lessonsList = document.getElementById('course-detail-lessons-list');
+            lessonsList.innerHTML = ''; // Clear previous lessons
+
+            // Reset lesson content display
+            document.getElementById('lesson-content-display').innerHTML = '<h4>Haz click en una lección para ver su contenido</h4><p>Selecciona cualquier lección de la lista para aprender más.</p>';
+
+
+            course.lessons.forEach(lesson => {
+                const lessonItem = document.createElement('li');
+                lessonItem.className = lesson.completed ? 'completed' : '';
+                lessonItem.innerHTML = `
+                    <span class="lesson-title-link" data-lesson-id="${lesson.id}">${lesson.title}</span>
+                    ${lesson.completed 
+                        ? `<button class="complete-lesson-btn" disabled>Completada</button>`
+                        : `<button class="complete-lesson-btn" data-lesson-id="${lesson.id}">Marcar como Completada</button>`
+                    }
+                `;
+                lessonsList.appendChild(lessonItem);
+            });
+
+            // NEW: Add event listeners for lesson titles to display content
+            lessonsList.querySelectorAll('.lesson-title-link').forEach(link => {
+                link.addEventListener('click', (event) => {
+                    const lessonId = event.target.dataset.lessonId;
+                    const targetLesson = course.lessons.find(l => l.id === lessonId);
+                    if (targetLesson) {
+                        document.getElementById('lesson-content-display').innerHTML = `
+                            <h4>${targetLesson.title}</h4>
+                            ${targetLesson.content}
+                        `;
+                    }
+                });
+            });
+
+
+            // Attach event listeners for new buttons
+            lessonsList.querySelectorAll('.complete-lesson-btn:not([disabled])').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const lessonId = event.target.dataset.lessonId; // Corrected from dataset.lesson-id
+                    const targetLesson = course.lessons.find(l => l.id === lessonId);
+                    if (targetLesson) {
+                        targetLesson.completed = true;
+                        saveUserCourses(); // Guarda el progreso actualizado
+                        showNotification(`Lección "${targetLesson.title}" completada.`);
+                        renderCourseDetails(currentCourseId); // Re-render to update button states and progress bar
+                    }
+                });
+            });
+
+            function updateProgressBar() {
+                const progress = calculateCourseProgress(courseId);
+                const progressBar = document.getElementById('course-detail-progress-bar');
+                progressBar.style.width = `${progress}%`;
+                progressBar.textContent = `${progress}%`;
+            }
+            updateProgressBar(); // Initial update of progress bar
+        }
+
+        // --- Event Listeners for Navigation ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add event listeners to nav links
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', (event) => {
+                    const sectionId = event.target.dataset.section;
+                    showSection(sectionId);
+                });
+            });
+
+            // Initial load: show home section
+            showSection('home');
+        });
+    </script>
+</body>
+</html>
